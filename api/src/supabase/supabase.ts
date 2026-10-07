@@ -7,6 +7,4 @@ if (!supabaseUrl || !supabaseKey) {
     throw new Error("Database URL and or Key were not found")
 }
 
-const supabase = createClient(supabaseUrl, supabaseKey)
-
-export default supabase
+export const supabaseClient = createClient(supabaseUrl, supabaseKey)

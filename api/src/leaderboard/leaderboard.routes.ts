@@ -1,8 +1,9 @@
-import express, { type Express } from "express";
+import { container } from "tsyringe";
 import LeaderboardController from "./leaderboard.controller.ts";
+import express, { type Express } from "express";
 
+const leaderboardController = container.resolve(LeaderboardController);
 const leaderboardRoutes = express.Router();
-const leaderboardController = new LeaderboardController
 
 leaderboardRoutes.get('/', leaderboardController.getAll);
 leaderboardRoutes.get('/me', leaderboardController.currentUserRecord);

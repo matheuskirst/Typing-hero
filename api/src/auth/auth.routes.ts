@@ -1,10 +1,14 @@
-import express, { type Express } from "express";
+import { container } from "tsyringe";
 import AuthController from "./auth.controller.ts";
+import express, { type Express } from "express";
+import { validateData } from "../middleware/validateData.ts";
+import { LoginSchema, SignupSchema } from "./auth.schemas.ts";
 
+
+const authController = container.resolve(AuthController);
 const authRoutes = express.Router();
-const authController = new AuthController
 
-authRoutes.post('/login', authController.login);
-authRoutes.post('/signup', authController.signup);
+authRoutes.post('/login', validateData(LoginSchema), authController.login);
+authRoutes.post('/signup', validateData(SignupSchema), authController.signup);
 
 export default authRoutes

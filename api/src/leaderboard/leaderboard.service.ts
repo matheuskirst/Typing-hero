@@ -1,54 +1,40 @@
-import supabase from "../supabase/supabase.ts";
+import { injectable, inject } from "tsyringe";
+import { supabaseClient } from "../supabase/supabase.ts";
 
+@injectable()
 class LeaderboardService {
-    constructor() {}
+    constructor(@inject("SupabaseClient") private readonly supabase: typeof supabaseClient) {}
 
     async getAll() {
-        try {
-            const { data, error } = await supabase
-                .from('leaderboard')
-                .select('id, score, wpm')
-                .eq("song_key", "")
+        const { data, error } = await this.supabase 
+            .from('leaderboard')
+            .select('id, score, wpm');
 
-            if (error) {
-                return error
-            }
+        if (error) {
+            return error;
+        }
 
-            return data
-        }
-        catch {
-            
-        }
+        return data;
     }
 
-    async getOne(id: string) {
-        try {
-            const { data, error } = await supabase
-                .from('leaderboard')
-                .select('id, score, wpm')
-                .eq("user_id", "")
-                .eq("song_key", "")
-                .maybeSingle()
-    
-            if (error) {
-                return error
-            }
-    
-            return data
-        }
-        catch {
+    async getOne(userId: string, songKey: string) {
+        const { data, error } = await this.supabase
+            .from('leaderboard')
+            .select('id, score, wpm')
+            .eq("user_id", userId)
+            .eq("song_key", songKey)
+            .maybeSingle()
 
+        if (error) {
+            return error;
         }
+
+        return data;
     }
 
     async update() {
-        try {
 
-        }
-        catch {
-
-        }
     }
 }
 
-export default LeaderboardService
+export default LeaderboardService;

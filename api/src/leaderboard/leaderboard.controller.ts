@@ -1,28 +1,25 @@
-import { type Request, type Response } from "express"
-import supabase from "../supabase/supabase.ts";
+import { injectable, inject } from "tsyringe";
 import LeaderboardService from "./leaderboard.service.ts";
+import { type Request, type Response } from "express"
 
+@injectable()
 class LeaderboardController {
-    constructor(
-        private readonly leaderboardService: LeaderboardService,
-    ) {}
+    constructor(@inject("LeaderboardService") private readonly leaderboardService: LeaderboardService) {}
 
-    async getAll(req: Request, res: Response) {
-        
+    getAll = async (req: Request, res: Response) => {
         const result = await this.leaderboardService.getAll();
 
-        res.send("Leaderboard players:")
+        return res.send(result)
     }
 
-    async currentUserRecord(req: Request, res: Response) {
-        
-        const result = await this.leaderboardService.getOne("");
+    currentUserRecord = async (req: Request, res: Response) => {
+        // const result = await this.leaderboardService.getOne();
 
-        res.send("Current user record:")
+        return res.send("Current user record:")
     }
 
-    async saveRecord(req: Request, res: Response) {
-        res.send("Saving record...")
+    saveRecord = (req: Request, res: Response) => {
+        return res.send("Saving record...")
     }
 }
 
