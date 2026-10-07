@@ -1,52 +1,34 @@
 import { type Request, type Response } from "express"
 import supabase from "../supabase/supabase.ts";
-import LoginDto from "./dto/login.dto.ts";
-import SignupDto from "./dto/singup.dto.ts";
+import AuthService from "./auth.service.ts";
+import { LoginSchema, type LoginDto } from "./schema/login.schema.ts";
+import { SignupSchema, type SignupDto } from "./schema/singup.schema.ts";
 
 class AuthController {
-    constructor() {}
+    constructor(
+        private readonly authService: AuthService,
+    ) {}
 
     async login(req: Request, res: Response) {
-        const loginDto = LoginDto.safeParse(req.body);
-        if (!loginDto.success) {
-            res.send(loginDto.error)
+        const loginSchema = LoginSchema.safeParse(req.body);
+        if (!loginSchema.success) {
+            res.send(loginSchema.error)
             return
         }
 
-        // const { data, error } = await supabase.auth.signInWithPassword({
-        //     email: loginDto.data.email,
-        //     password: loginDto.data.password,
-        // });
-
-        // if (error) {
-        //     res.send(error)
-        //     return
-        // }
+        const result = await this.authService.login(loginSchema.data);
 
         res.send("Logging in...")
     }
 
     async signup(req: Request, res: Response) {
-        const signupDto = SignupDto.safeParse(req.body)
-        if (!signupDto.success) {
-            res.send(signupDto.error)
+        const signupSchema = SignupSchema.safeParse(req.body)
+        if (!signupSchema.success) {
+            res.send(signupSchema.error)
             return
         }
 
-        // const { data, error } = await supabase.auth.signUp({
-        //     email: signupDto.data.email,
-        //     password: signupDto.data.password,
-        //     options: {
-        //         data: {
-        //             display_name: signupDto.data.nickname,
-        //         },
-        //     },
-        // });
-
-        // if (error) {
-        //     res.send(error)
-        //     return
-        // }
+        const result = await this.authService.signup(signupSchema.data);
 
         res.send("Signing up...")
     }

@@ -1,25 +1,22 @@
 import { type Request, type Response } from "express"
 import supabase from "../supabase/supabase.ts";
+import LeaderboardService from "./leaderboard.service.ts";
 
 class LeaderboardController {
-    constructor() {}
+    constructor(
+        private readonly leaderboardService: LeaderboardService,
+    ) {}
 
     async getAll(req: Request, res: Response) {
-        // const { data, error } = await supabase
-        //     .from('leaderboard')
-        //     .select('id, score, wpm')
-        //     .eq("song_key", "")
+        
+        const result = await this.leaderboardService.getAll();
 
         res.send("Leaderboard players:")
     }
 
     async currentUserRecord(req: Request, res: Response) {
-        // const { data, error } = await supabase
-        //     .from('leaderboard')
-        //     .select('id, score, wpm')
-        //     .eq("user_id", "")
-        //     .eq("song_key", "")
-        //     .maybeSingle()
+        
+        const result = await this.leaderboardService.getOne("");
 
         res.send("Current user record:")
     }
