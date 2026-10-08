@@ -2,7 +2,6 @@
 let currentLeaderboardMetric = 'score';
 
 // 1. Cria ou obtém o container do Leaderboard na DOM
-// 1. Cria ou obtém o container do Leaderboard na DOM
 function createLeaderboardUI() {
   let boardContainer = document.getElementById("leaderboardContainer");
   const mainContainer = document.querySelector(".song-selector-container");
