@@ -8,15 +8,23 @@ class AuthController {
     constructor(@inject("AuthService") private readonly authService: AuthService) {}
 
     login = async (req: Request, res: Response) => {
-        // const result = await this.authService.login(req.body);
+        const result = await this.authService.login(req.body);
 
-        res.status(StatusCodes.OK).send(req)
+        if (!result.success) {
+            return res.status(StatusCodes.UNAUTHORIZED).send(result.error)
+        }
+
+        res.status(StatusCodes.OK).send(result.data)
     }
 
     signup = async (req: Request, res: Response) => {
-        // const result = await this.authService.signup(req.body);
+        const result = await this.authService.signup(req.body);
 
-        res.status(StatusCodes.OK).send(req)
+        if (!result.success) {
+            return res.status(StatusCodes.UNAUTHORIZED).send(result.error)
+        }
+
+        res.status(StatusCodes.OK).send(result.data)
     }
 }
 

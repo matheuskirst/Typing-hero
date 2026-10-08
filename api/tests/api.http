@@ -1,4 +1,4 @@
 GET http://localhost:5000/api/leaderboard
     ?songKey=hellfire
-    &orderBy=wpm
-    &ascending=true
+    &orderBy=score
+    &ascending=false

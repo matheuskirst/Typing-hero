@@ -13,10 +13,10 @@ class AuthService {
         });
 
         if (error) {
-            return error
+            return { success: false, error: error.message };
         }
 
-        return data
+        return { success: true, data: data };
     }
 
     async signup(signupDto: SignupDto) {
@@ -31,10 +31,10 @@ class AuthService {
         });
 
         if (error) {
-            return error
+            return { success: false, error: error.message };
         }
 
-        return data
+        return { success: true, data: data };
     }
 }
 
