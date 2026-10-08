@@ -1,20 +1,37 @@
 import { injectable, inject } from "tsyringe";
 import { supabaseClient } from "../supabase/supabase.ts";
+import { success } from "zod";
+import { fa } from "zod/locales";
 
 @injectable()
 class LeaderboardService {
     constructor(@inject("SupabaseClient") private readonly supabase: typeof supabaseClient) {}
 
-    async getAll() {
-        const { data, error } = await this.supabase 
+    async getAll(
+        songKey: any | undefined,
+        orderBy: any | undefined,
+        ascending: any | undefined
+    ) {
+        let query = this.supabase
             .from('leaderboard')
-            .select('id, score, wpm');
+            .select('id, song_key, player, rank, wpm, score')
 
-        if (error) {
-            return error;
+        if (songKey) {
+            query = query.eq('song_key', songKey)
         }
 
-        return data;
+        if (orderBy) {
+            query = query.order(orderBy ?? 'score', { ascending: ascending ?? false })
+        }
+
+        const { data, error } = await query 
+            .limit(50);
+
+        if (error) {
+            return { success: false, error: error.message };
+        }
+
+        return { success: true, data: data };
     }
 
     async getOne(userId: string, songKey: string) {
@@ -26,10 +43,10 @@ class LeaderboardService {
             .maybeSingle()
 
         if (error) {
-            return error;
+            return { success: false, error: error.message };
         }
 
-        return data;
+        return { success: true, data: data };
     }
 
     async update() {
