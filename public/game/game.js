@@ -301,27 +301,6 @@ document.getElementById('btnIncreaseFont')?.addEventListener('click', () => upda
 document.getElementById('btnDecreaseFont')?.addEventListener('click', () => updateFontSize(currentFontSize - 0.2));
 document.getElementById('btnResetFont')?.addEventListener('click', () => updateFontSize(baseFontSize));
 
-// --- INICIALIZAÇÃO ÚNICA NO DOMCONTENTLOADED ---
-document.addEventListener("DOMContentLoaded", () => {
-  // 1. Aplica preferências salvas do usuário
-  applyPreferences();
-  updateFontSize(currentFontSize);
-
-  // 2. Inicializa o seletor de músicas e leaderboard
-  const songSelect = document.getElementById("songSelect");
-  if (songSelect) {
-    if (songSelect.value) {
-      renderLeaderboard(songSelect.value, currentLeaderboardMetric);
-      updateUserPBDisplay(songSelect.value);
-    }
-
-    songSelect.addEventListener("change", (e) => {
-      renderLeaderboard(e.target.value, currentLeaderboardMetric);
-      updateUserPBDisplay(e.target.value);
-    });
-  }
-});
-
 // ==========================================
 // SISTEMA DE NOTIFICAÇÃO (TOAST CYBERPUNK)
 // ==========================================

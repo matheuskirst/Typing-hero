@@ -1,7 +1,8 @@
 import 'reflect-metadata'
 import env from 'dotenv';
-import 'dotenv/config'
-import './container.ts'
+import 'dotenv/config';
+import './container.ts';
+import cors from 'cors';
 import express, { type Express } from "express";
 import authRoutes from "./auth/auth.routes.ts";
 import leaderboardRoutes from './leaderboard/leaderboard.routes.ts';
@@ -11,6 +12,9 @@ async function bootstrap() {
     const app: Express = express();
 
     app.use(express.json());
+    app.use(cors({
+        origin: process.env.APP_URL,
+    }));
 
     app.use('/api/auth', authRoutes);
     app.use('/api/leaderboard', leaderboardRoutes)

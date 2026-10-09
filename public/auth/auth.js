@@ -1,5 +1,3 @@
-import supabase from "../data/supabase";
-
 let currentUser = null;
 
 // 1. Alterna entre as abas 'login' e 'register'

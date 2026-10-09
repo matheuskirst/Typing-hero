@@ -5,9 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TypingHero</title>
     <link rel="stylesheet" href="game/game.css">
-    <link rel="stylesheet" href="main.css">
+    <link rel="stylesheet" href="style.css">
     <link rel="icon" type="image/x-icon" href="favicon.ico">
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
     <header>
@@ -17,13 +16,13 @@
                 <span class="user-icon">👤</span>
                 <span id="userInfo">Carregando...</span>
             </div>
-    
+            
             <div style="display: flex; gap: 10px; align-items: center;">
                 <!-- Botão de Configurações / Acessibilidade -->
                 <button id="settingsModalBtn" class="cyber-nav-btn">
                     ⚙️ CONFIG
                 </button>
-    
+
                 <a id="authActionBtn" href="auth.html" class="auth-btn">
                     <span>Entrar / Cadastrar</span>
                 </a>
@@ -54,10 +53,11 @@
     
         <h1>TYPING HERO</h1>
         <p class="subtitle">Escolha o seu ritmo e digite com precisão</p>
-        
+
         <!-- CONTAINER PRINCIPAL DA SELEÇÃO E LEADERBOARD -->
         <div class="song-selector-container">
-            <!-- Grupo Esquerdo: Seletor + Recorde Pessoal -->
+
+            <!-- Song Selector + Personal Record -->
             <div class="selector-group-wrapper">
                 <div class="selector-group">
                     <span class="song-selector-label">MÚSICA / TEMA:</span>
@@ -66,7 +66,7 @@
                         <option value="francesca">Ventos de Francesca (Cyber Psytrance)</option>
                     </select>
                 </div>
-    
+
                 <div class="user-pb-card">
                     <div class="pb-title">⚡ SEU RECORDE (PB)</div>
                     <div class="pb-stats">
@@ -77,12 +77,17 @@
                     </div>
                 </div>
             </div>
-    
-            <!-- O JS (createLeaderboardUI) injetará a div .leaderboard-section aqui dinamicamente -->
+
+            <!-- Leaderboard  -->
+            <div id="leaderboardContainer" class="leaderboard-section">
+                <div class="empty-board" style="padding: 15px; text-align: center; color: #888;">
+                    Nenhuma pontuação registrada. Seja o primeiro!
+                </div>
+            </div>
         </div>
-    
+        
         <button class="btn btn-primary" id="playBtn">PLAY</button>
-    
+        
         <!-- MODAL DE CONFIGURAÇÕES VISUAIS & ACESSIBILIDADE -->
         <div id="settingsOverlay" class="cyber-modal-overlay">
             <div class="cyber-modal-card">
@@ -125,7 +130,7 @@
                             <button id="btnIncreaseFont" class="cyber-btn-sm">A+</button>
                           </div>
                         </div>
-    
+
                         <label class="setting-item">
                             <span>Modo Alto Contraste (Sem Efeito Halo)</span>
                             <input type="checkbox" id="cfgHighContrast">
@@ -134,7 +139,7 @@
                 </div>
             </div>
         </div>
-    
+
         <!-- Modal de Aviso de Convidado -->
         <div id="guestModal" class="cyber-modal-overlay">
             <div class="cyber-modal">
@@ -154,9 +159,9 @@
     </main>
 
     <!-- Módulos da Aplicação -->
+    <script type="module" src="leaderboard/leaderboard-service.js"></script>
     <script src="auth/auth.js"></script>
     <script src="game/audio.js"></script>
-    <script src="leaderboard/leaderboardService.js"></script>
     <script src="game/game.js"></script>
 </body>
 </html>
