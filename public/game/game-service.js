@@ -1,99 +1,5 @@
-// ==========================================
-// CONFIGURAÇÕES, SEGURANÇA E BIBLIOTECA
-// ==========================================
-
-const MUSIC_LIBRARY = {
-  "9_circles_of_hell": {
-    sectionName: "Infernal Descent",
-    tracks: {
-      "limbo": {
-        title: "Limbo Echoes",
-        url: "musicas/Limbo Echoes.mp3",
-        multiplier: 1.0,
-        phrases: [
-          "A névoa esconde o abismo, mas a batida ecoa nas profundezas.",
-          "O Primeiro Círculo sussurra a promessa da dor eterna.",
-          "Sem esperança, mas com o ritmo gravado na alma dos esquecidos.",
-          "A pulsação do inferno ressoa na penumbra dos filósofos.",
-          "Sinta o pulso sombrio antes de despencar no abismo de fogo.",
-          "Um lugar sem salvação, onde o tempo é ditado pela frequência do caos.",
-          "A luz da razão se apaga na batida do inferno.",
-          "Suspiros sem lamento ecoam pelos prados da eternidade.",
-          "Passos lentos sobre a penumbra de uma paz ilusória."
-        ]
-      },
-      "lust": {
-        title: "Winds of Francesca WIP",
-        url: "musicas/Winds of Francesca.mp3",
-        multiplier: 1.15,
-        phrases: [
-          "a"
-        ]
-      }
-    }
-  },
-  "cyber_overdrive": {
-    sectionName: "Cybernetic Protocol",
-    tracks: {
-      "hellfire": {
-        title: "Hellfire Overdrive",
-        url: "musicas/Hellfire Overdrive.mp3",
-        multiplier: 1.5,
-        phrases: [
-          "Metal queimando no asfalto, neon sangrando no horizonte.",
-          "Acelere até o motor virar fumaça e a alma virar código.",
-          "Sem freios, sem limites, sem salvação: bem-vindo ao Hellfire Overdrive.",
-          "Onde o cromo derrete e a velocidade domina o caos.",
-          "Sinta o peso do aço, o calor do fogo e a força da distorção.",
-          "Modo Overdrive Ativado: Sobrecarga nos sistemas",
-          "Sangue de óleo, coração de nitroglicerina.",
-          "Ultrapasse a velocidade da morte.",
-          "Conexão neural queimada a 10.000 RPM.",
-          "Injetando caos diretamente no barramento de dados.",
-          "As ruas de cromo não perdoam quem tem medo de pisar no fundo.",
-          "Guitarras distorcidas ecoando nas ruínas de uma metrópole esquecida.",
-          "Se o futuro é sombrio, nós o iluminaremos com o fogo dos nossos motores.",
-          "Na fronteira entre o circuito e a carne, apenas o ritmo do metal permanece.",
-          "Nossa liberdade não é programada, é conquistada na rotação máxima."
-        ]
-      },
-      "code_master": {
-        title: "Bitrush_Overdrive",
-        url: "musicas/Bitrush Overdrive.mp3",
-        multiplier: 1.25,
-        phrases: [
-          "let pontos = 0;",
-          "const nome = 'Jogador 1';",
-          "console.log('Iniciando o jogo...');",
-          "let vidas = 3;",
-          "vidas -= 1;",
-          "const ativo = true;",
-          "if (combo >= 10) { multiplicador = 2; }",
-          "function somarPontos(atual, bonus) { return atual + bonus; }",
-          "for (let i = 0; i < 5; i++) { criarInimigo(); }",
-          "const lista = ['fácil', 'médio', 'difícil'];",
-          "const doubleScore = (score) => score * 2;",
-          "const player = { name: 'Hero', hp: 100, isAlive: true };",
-          "const speed = wpm > 80 ? 'Ultra Fast' : 'Normal';",
-          "const arr = [1, 2, 3].map((num) => num * 10);",
-          "setTimeout(() => { alert('Tempo esgotado!'); }, 3000);",
-          "const { combo, multiplier } = gameState;"
-        ]
-      }
-    }
-  }
-};
-
-const RANKS = [
-  { name: "D", min: 0, color: "#888888" },
-  { name: "C", min: 10, color: "#00ccff" },
-  { name: "B", min: 25, color: "#00ff88" },
-  { name: "A", min: 45, color: "#ffcc00" },
-  { name: "S", min: 70, color: "#ff9900" },
-  { name: "SS", min: 100, color: "#ff0066" },
-  { name: "SSS", min: 135, color: "#ff00cc" },
-  { name: "HERO", min: 180, color: "#ffffff" }
-];
+import { GAME_RANKS } from './game-ranks.js';
+import { MUSIC_LIBRARY } from './music-library.js';
 
 // ==========================================
 // ELEMENTOS DO DOM & ESTADO GLOBAL
@@ -435,15 +341,15 @@ if (songSelect) {
 }
 
 function getCurrentRank() {
-  for (let i = RANKS.length - 1; i >= 0; i--) {
-    if (hypePoints >= RANKS[i].min) {
+  for (let i = GAME_RANKS.length - 1; i >= 0; i--) {
+    if (hypePoints >= GAME_RANKS[i].min) {
       highestRankIndex = Math.max(highestRankIndex, i);
       currentRankIndex = i;
-      return { ...RANKS[i], index: i };
+      return { ...GAME_RANKS[i], index: i };
     }
   }
   currentRankIndex = 0;
-  return { ...RANKS[0], index: 0 };
+  return { ...GAME_RANKS[0], index: 0 };
 }
 
 function triggerRankUpAnimation(rank) {
@@ -553,7 +459,7 @@ function updateStats() {
     hypeValue.style.color = currentRank.color;
   }
 
-  const nextRank = RANKS[currentRank.index + 1] || currentRank;
+  const nextRank = GAME_RANKS[currentRank.index + 1] || currentRank;
   const currentMin = currentRank.min;
   const currentMax = nextRank.min === currentMin ? currentMin + 30 : nextRank.min;
   const pct = Math.min(100, Math.max(0, ((hypePoints - currentMin) / (currentMax - currentMin)) * 100));
@@ -786,13 +692,13 @@ function endGame() {
 
   if (typeof playMenuMusic === "function") playMenuMusic();
 
-  const finalRankName = RANKS[highestRankIndex].name;
+  const finalRankName = GAME_RANKS[highestRankIndex].name;
   animateFinalScore(score);
 
   const finalRankEl = document.getElementById("finalRank");
   if (finalRankEl) {
     finalRankEl.textContent = finalRankName;
-    finalRankEl.style.color = RANKS[highestRankIndex].color;
+    finalRankEl.style.color = GAME_RANKS[highestRankIndex].color;
   }
   const finalWpmEl = document.getElementById("finalWpm");
   if (finalWpmEl) finalWpmEl.textContent = maxWpm;
@@ -912,7 +818,7 @@ if (input) {
         combo = 0; 
         const currentRank = getCurrentRank();
         if (currentRank.index > 0) {
-          const previousRank = RANKS[currentRank.index - 1];
+          const previousRank = GAME_RANKS[currentRank.index - 1];
           hypePoints = previousRank.min;
         } else {
           hypePoints = 0;

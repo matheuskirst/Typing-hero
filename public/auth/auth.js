@@ -1,3 +1,5 @@
+import { API_URL } from '../config.js'
+
 let currentUser = null;
 
 // 1. Alterna entre as abas 'login' e 'register'

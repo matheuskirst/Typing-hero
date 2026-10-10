@@ -9,7 +9,7 @@ export async function renderLeaderboardAsync(songKey, metric, scores) {
 
   const headerHtml = `
     <div class="leaderboard-header">
-      <div class="leaderboard-title">🏆 TOP PLACAR: ${escapeHtml(songTitle)}</div>
+      <div class="leaderboard-title">🏆 TOP PLACAR: ${songTitle}</div>
       <div class="leaderboard-toggle-buttons">
         <button 
           onclick="changeLeaderboardMetric('${songKey}', 'score')" 

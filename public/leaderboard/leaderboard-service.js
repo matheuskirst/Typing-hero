@@ -19,11 +19,6 @@ async function fetchScoresAsync(songKey, metric = 'score') {
   }
 }
 
-// Função global acionada ao clicar nos botões de Pontos/WPM
-window.changeLeaderboardMetric = function(songKey, metric) {
-  renderLeaderboardAsync(songKey, metric);
-};
-
 async function saveRecordAsync(songKey, newScore, rankName, wpm) {
   const parsedScore = Math.round(Number(newScore) || 0);
   const parsedWpm = Math.round(Number(wpm) || 0);
@@ -40,74 +35,69 @@ async function saveRecordAsync(songKey, newScore, rankName, wpm) {
                      currentUser.email?.split("@")[0] || 
                      "Jogador";
 
-  let recordUpdated = false;
+  try {
+    const { data: existingRecord, error: selectError } = await _supabase
+      .from("leaderboard")
+      .select("id, score, wpm")
+      .eq("user_id", userId)
+      .eq("song_key", songKey)
+      .maybeSingle();
 
-  if (typeof _supabase !== "undefined" && _supabase) {
-    try {
-      const { data: existingRecord, error: selectError } = await _supabase
-        .from("leaderboard")
-        .select("id, score, wpm")
-        .eq("user_id", userId)
-        .eq("song_key", songKey)
-        .maybeSingle();
+    if (selectError) {
+      console.error("Erro ao consultar registro existente:", selectError.message);
+    } else if (existingRecord) {
+      // Atualiza se superou O PONTO OU O WPM anterior
+      const isBetterScore = parsedScore > existingRecord.score;
+      const isBetterWpm = parsedWpm > existingRecord.wpm;
 
-      if (selectError) {
-        console.error("Erro ao consultar registro existente:", selectError.message);
-      } else if (existingRecord) {
-        // Atualiza se superou O PONTO OU O WPM anterior
-        const isBetterScore = parsedScore > existingRecord.score;
-        const isBetterWpm = parsedWpm > existingRecord.wpm;
+      if (isBetterScore || isBetterWpm) {
+        const updatePayload = {
+          rank: rankName,
+          player: playerName,
+          // Mantém o maior valor de cada um caso melhore individualmente
+          score: Math.max(parsedScore, existingRecord.score),
+          wpm: Math.max(parsedWpm, existingRecord.wpm)
+        };
 
-        if (isBetterScore || isBetterWpm) {
-          const updatePayload = {
-            rank: rankName,
-            player: playerName,
-            // Mantém o maior valor de cada um caso melhore individualmente
-            score: Math.max(parsedScore, existingRecord.score),
-            wpm: Math.max(parsedWpm, existingRecord.wpm)
-          };
-
-          const { error: updateError } = await _supabase
-            .from("leaderboard")
-            .update(updatePayload)
-            .eq("id", existingRecord.id);
-
-          if (!updateError) {
-            recordUpdated = true;
-            console.log("🔥 Recorde atualizado no Supabase!");
-          } else {
-            console.error("Erro ao atualizar recorde no Supabase:", updateError.message);
-          }
-        }
-      } else {
-        // Primeiro registro do usuário nesta música
-        const { error: insertError } = await _supabase
+        const { error: updateError } = await _supabase
           .from("leaderboard")
-          .insert([
-            {
-              user_id: userId,
-              player: playerName,
-              score: parsedScore,
-              rank: rankName,
-              wpm: parsedWpm,
-              song_key: songKey
-            }
-          ]);
+          .update(updatePayload)
+          .eq("id", existingRecord.id);
 
-        if (!insertError) {
-          recordUpdated = true;
-          console.log("🎯 Primeiros pontos registrados para esta música!");
+        if (!updateError) {
+          console.log("🔥 Recorde atualizado no Supabase!");
         } else {
-          console.error("Erro ao gravar novo ranking no Supabase:", insertError.message);
+          console.error("Erro ao atualizar recorde no Supabase:", updateError.message);
         }
       }
-    } catch (err) {
-      console.error("Erro inesperado ao salvar no Supabase:", err);
+    } else {
+      // Primeiro registro do usuário nesta música
+      const { error: insertError } = await _supabase
+        .from("leaderboard")
+        .insert([
+          {
+            user_id: userId,
+            player: playerName,
+            score: parsedScore,
+            rank: rankName,
+            wpm: parsedWpm,
+            song_key: songKey
+          }
+        ]);
+
+      if (!insertError) {
+        recordUpdated = true;
+        console.log("🎯 Primeiros pontos registrados para esta música!");
+      } else {
+        console.error("Erro ao gravar novo ranking no Supabase:", insertError.message);
+      }
     }
-    
-    await renderLeaderboardAsync(songKey, currentLeaderboardMetric);
-    await updateUserPBDisplay(songKey); 
+  } catch (err) {
+    console.error("Erro inesperado ao salvar no Supabase:", err);
   }
+  
+  await renderLeaderboardAsync(songKey, currentLeaderboardMetric);
+  await updateUserPBDisplay(songKey); 
 }
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -123,3 +113,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 });
+
+window.changeLeaderboardMetric = function(songKey, metric) {
+  renderLeaderboardAsync(songKey, metric);
+};
