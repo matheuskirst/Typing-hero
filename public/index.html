@@ -3,165 +3,50 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TypingHero</title>
-    <link rel="stylesheet" href="game/game.css">
+    <title>Typing Hero</title>
     <link rel="stylesheet" href="style.css">
-    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <link rel="icon" type="image/x-icon" href="assets/img/favicon.ico">
 </head>
-<body>
+<body class="bg-grid">
     <header>
-        <!-- Top Bar -->
-        <div class="top-auth-bar">
+        <div class="top-bar">
             <div class="user-status">
                 <span class="user-icon">👤</span>
                 <span id="userInfo">Carregando...</span>
             </div>
-            
             <div style="display: flex; gap: 10px; align-items: center;">
-                <!-- Botão de Configurações / Acessibilidade -->
-                <button id="settingsModalBtn" class="cyber-nav-btn">
-                    ⚙️ CONFIG
-                </button>
-
+                <button id="settingsModalBtn" class="cyber-nav-btn">⚙️ CONFIG</button>
                 <a id="authActionBtn" href="auth.html" class="auth-btn">
-                    <span>Entrar / Cadastrar</span>
+                    Entrar / Cadastrar
                 </a>
             </div>
         </div>
     </header>
-
     <main>
-        <div class="screen-flash" id="screenFlash"></div>
-        
-        <button id="quitBtn" onclick="returnToMenu()">SAIR / MENU</button>
-        
-        <audio id="menuMusic" loop></audio>
-        <audio id="gameMusic" loop></audio>
-        
-        <div class="bg-grid"></div>
-        <div class="bg-glow"></div>
-        <div class="bg-glow"></div>
-        
-        <!-- Componente de Rank Up no Canto Superior Direito -->
-        <div class="rank-up-overlay" id="rankUpOverlay">
-            <div class="rank-up-title">RANK UP!</div>
-            <div class="rank-badge-container" id="rankBadgeContainer">
-                <div class="rank-up-badge" id="rankUpBadge">A</div>
-                <div class="rank-up-shockwave" id="rankUpShockwave"></div>
-            </div>
-        </div>
-    
         <h1>TYPING HERO</h1>
-        <p class="subtitle">Escolha o seu ritmo e digite com precisão</p>
+        <p>Escolha o seu ritmo e digite com precisão</p>
 
-        <!-- CONTAINER PRINCIPAL DA SELEÇÃO E LEADERBOARD -->
-        <div class="song-selector-container">
+        <div id="central-container">
+            <div id="song-selector"></div>
 
-            <!-- Song Selector + Personal Record -->
-            <div class="selector-group-wrapper">
-                <div class="selector-group">
-                    <span class="song-selector-label">MÚSICA / TEMA:</span>
-                    <select class="song-select" id="songSelect">
-                        <option value="hellfire">Hellfire Overdrive (Cyberpunk/Metal) (x1.5)</option>
-                        <option value="francesca">Ventos de Francesca (Cyber Psytrance)</option>
-                    </select>
-                </div>
-
-                <div class="user-pb-card">
-                    <div class="pb-title">⚡ SEU RECORDE (PB)</div>
-                    <div class="pb-stats">
-                        <span class="pb-item"><strong id="pbScore">0</strong> pts</span>
-                        <span class="pb-divider">|</span>
-                        <span class="pb-item"><strong id="pbWpm">0</strong> WPM</span>
-                        <span class="pb-badge" id="pbRank">--</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Leaderboard  -->
-            <div id="leaderboardContainer" class="leaderboard-section">
-                <div class="empty-board" style="padding: 15px; text-align: center; color: #888;">
-                    Nenhuma pontuação registrada. Seja o primeiro!
-                </div>
-            </div>
-        </div>
-        
-        <button class="btn btn-primary" id="playBtn">PLAY</button>
-        
-        <!-- MODAL DE CONFIGURAÇÕES VISUAIS & ACESSIBILIDADE -->
-        <div id="settingsOverlay" class="cyber-modal-overlay">
-            <div class="cyber-modal-card">
-                <div class="cyber-modal-header">
-                    <h2>⚙️ CONFIGURAÇÕES VISUAIS</h2>
-                    <button id="closeSettingsModalBtn" class="close-btn">&times;</button>
+            <div id="leaderboard-container">
+                <h2>Placar Global</h2>
+                <div id="leaderboard-controls">
+                    <button id="leaderboard-sort-score">Pontos</button>
+                    <button id="leaderboard-sort-wmp">WPM</button>
                 </div>
     
-                <div class="cyber-form">
-                    <div class="settings-group">
-                        <label class="setting-item">
-                            <span>Fonte Monospace Limpa</span>
-                            <input type="checkbox" id="cfgCleanFont">
-                        </label>
-    
-                        <label class="setting-item">
-                            <span>Desativar Piscada do Cursor</span>
-                            <input type="checkbox" id="cfgDisableBlink">
-                        </label>
-    
-                        <label class="setting-item">
-                            <span>Desativar Brilho/Glow de Texto</span>
-                            <input type="checkbox" id="cfgDisableGlow">
-                        </label>
-    
-                        <label class="setting-item">
-                            <span>Efeitos de Tremor (Screen Shake)</span>
-                            <input type="checkbox" id="cfgScreenShake" checked>
-                        </label>
-                    </div>
-    
-                    <div class="settings-group accessibility-box">
-                        <h4>👓 ACESSIBILIDADE (MIOPIA / VISÃO)</h4>
-                        
-                      <div class="accessibility-option-row">
-                          <span class="config-label">Tamanho do Texto do Jogo</span>
-                          <div class="font-size-controls">
-                            <button id="btnDecreaseFont" class="cyber-btn-sm">A-</button>
-                            <button id="btnResetFont" class="cyber-btn-sm">100%</button>
-                            <button id="btnIncreaseFont" class="cyber-btn-sm">A+</button>
-                          </div>
-                        </div>
-
-                        <label class="setting-item">
-                            <span>Modo Alto Contraste (Sem Efeito Halo)</span>
-                            <input type="checkbox" id="cfgHighContrast">
-                        </label>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Modal de Aviso de Convidado -->
-        <div id="guestModal" class="cyber-modal-overlay">
-            <div class="cyber-modal">
-                <div class="cyber-modal-header">
-                    <span class="warning-icon">⚠️</span>
-                    <span class="cyber-modal-title">AVISO DE AUTENTICAÇÃO</span>
-                </div>
-                <div class="cyber-modal-body">
-                    Seus pontos <strong class="highlight-pink">não serão salvos</strong> no Leaderboard porque você está jogando como <strong class="highlight-cyan">Convidado</strong>.
-                </div>
-                <div class="cyber-modal-footer">
-                    <button id="modalCancelBtn" class="cyber-modal-btn btn-cancel">CANCELAR</button>
-                    <button id="modalConfirmBtn" class="cyber-modal-btn btn-confirm">CONTINUAR ASSIM</button>
-                </div>
+                <table id="leaderboard-table">
+                    <tr>
+                        <th>#</th>
+                        <th>Jogador</th>
+                        <th>Rank</th>
+                        <th>WPM</th>
+                        <th>Pontos</th>
+                    </tr>
+                </table>
             </div>
         </div>
     </main>
-
-    <!-- Módulos da Aplicação -->
-    <script type="module" src="leaderboard/leaderboard-service.js"></script>
-    <script src="auth/auth.js"></script>
-    <script src="game/audio.js"></script>
-    <script type="module" src="game/game-service.js"></script>
 </body>
 </html>
