@@ -10,13 +10,13 @@ export async function fetchScoresAsync(songName, orderBy = 'score') {
       request = request + `orderBy=${orderBy}` + '&';
     }
     
-    const result = await fetch(request)
-    if (!result.ok) {
+    const response = await fetch(request)
+    if (!response.ok) {
       console.error("Erro na conexão com o servidor");
       return;
     }
 
-    const scores = await result.json();
+    const scores = await response.json();
     return scores;
   }
   catch (e){
@@ -24,9 +24,12 @@ export async function fetchScoresAsync(songName, orderBy = 'score') {
   }
 }
 
-export async function saveScoreAsync() {
+export async function saveScoreAsync(data) {
   try{
-
+    const response = await fetch(data, {
+      method: "POST",
+      body: data
+    });
   }
   catch (e){
     console.error("Erro na conexão com o servidor:", e);
