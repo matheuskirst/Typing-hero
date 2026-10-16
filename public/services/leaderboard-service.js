@@ -1,8 +1,16 @@
 import { API_URL } from "../config.js";
 
-async function fetchScoresAsync(songKey, metric = 'score') {
+export async function fetchScoresAsync(songName, orderBy = 'score') {
   try{
-    const result = await fetch(`${API_URL}/leaderboard?songKey=${songKey}&orderBy=${metric}`)
+    let request = `${API_URL}/leaderboard?`;
+    if (songName) {
+      request = request + `songKey=${songName}` + '&';
+    }
+    if (orderBy) {
+      request = request + `orderBy=${orderBy}` + '&';
+    }
+    
+    const result = await fetch(request)
     if (!result.ok) {
       console.error("Erro na conexão com o servidor");
       return;
@@ -16,7 +24,7 @@ async function fetchScoresAsync(songKey, metric = 'score') {
   }
 }
 
-async function saveScore() {
+export async function saveScoreAsync() {
   try{
 
   }

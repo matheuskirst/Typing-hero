@@ -9,8 +9,8 @@
 
 ### IN PROGRESS
 - Pages overhaul;
-- Game state;
-- Leaderboard cache for faster sorting;
+- Leaderboard in-memory sorting;
+- Game system;
 - Add the remaining CRUD operations;
 - Authentication and (maybe) Authorization;
 - Remove boilerplate code;
