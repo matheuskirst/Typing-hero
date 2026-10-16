@@ -20,7 +20,7 @@ export async function fetchScoresAsync(songName, orderBy = 'score') {
     return scores;
   }
   catch (e){
-    console.error("Erro na conexão com o servidor:", e);
+    console.error("Erro de conexão com o servidor:", e);
   }
 }
 
@@ -32,6 +32,6 @@ export async function saveScoreAsync(data) {
     });
   }
   catch (e){
-    console.error("Erro na conexão com o servidor:", e);
+    console.error("Erro de conexão com o servidor:", e);
   }
 }
